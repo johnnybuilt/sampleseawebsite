@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sea-Gal Technologies — Investor Overview</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #020810;
+    --abyss: #050f1e;
+    --deep: #071828;
+    --mid: #0a2540;
+    --cyan: #00e5ff;
+    --teal: #00bcd4;
+    --glow: #00fff7;
+    --amber: #ffab00;
+    --white: #e8f4f8;
+    --muted: #7aa8bc;
+    --glass: rgba(0, 229, 255, 0.05);
+    --glass-border: rgba(0, 229, 255, 0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed; width: 12px; height: 12px;
+    background: var(--cyan); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1px solid rgba(0,229,255,0.4); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease, width 0.3s, height 0.3s;
+  }
+
+  /* Sonar canvas background */
+  #sonar-canvas {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0; opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(2,8,16,0.95), transparent);
+    backdrop-filter: blur(8px);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; letter-spacing: 0.15em;
+    color: var(--cyan);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-cta {
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 10px 24px; border: 1px solid var(--cyan);
+    color: var(--cyan); text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-cta:hover { background: var(--cyan); color: var(--void); }
+
+  /* Sections */
+  section { position: relative; z-index: 1; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 140px 10% 80px;
+    overflow: hidden;
+  }
+  .hero-eyebrow {
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 40px; height: 1px; background: var(--cyan);
+  }
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    line-height: 0.92; letter-spacing: 0.02em;
+    margin-bottom: 32px;
+  }
+  .hero-headline .accent { color: var(--cyan); }
+  .hero-sub {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 400; color: var(--muted);
+    max-width: 560px; line-height: 1.6;
+    margin-bottom: 48px;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    padding: 16px 40px;
+    background: var(--cyan); color: var(--void);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none; border: none; cursor: none;
+    transition: background 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--glow); transform: translateY(-2px); }
+  .btn-outline {
+    padding: 16px 40px;
+    background: transparent; color: var(--cyan);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none; border: 1px solid var(--glass-border); cursor: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--cyan); }
+
+  .hero-stats {
+    position: absolute; right: 8%; bottom: 15%;
+    display: flex; flex-direction: column; gap: 24px;
+    align-items: flex-end;
+  }
+  .stat-card {
+    text-align: right;
+    padding: 20px 24px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    animation: fadeInRight 0.8s ease forwards;
+  }
+  .stat-card:nth-child(1) { animation-delay: 1s; }
+  .stat-card:nth-child(2) { animation-delay: 1.2s; }
+  .stat-card:nth-child(3) { animation-delay: 1.4s; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem; color: var(--cyan); letter-spacing: 0.05em;
+  }
+  .stat-label {
+    font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted); margin-top: 4px;
+  }
+
+  .scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    font-size: 0.6rem; letter-spacing: 0.2em; color: var(--muted);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .scroll-line {
+    width: 1px; height: 40px; background: linear-gradient(to bottom, var(--cyan), transparent);
+  }
+
+  /* PROBLEM / OPPORTUNITY */
+  #problem {
+    padding: 120px 10%;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .section-label {
+    font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::before {
+    content: ''; display: block; width: 24px; height: 1px; background: var(--cyan);
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800; line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .section-title .accent { color: var(--cyan); }
+  .section-body {
+    font-size: 0.85rem; line-height: 1.8;
+    color: var(--muted); margin-bottom: 20px;
+  }
+
+  .ocean-viz {
+    position: relative; height: 400px;
+    border: 1px solid var(--glass-border);
+    overflow: hidden;
+    background: linear-gradient(to bottom, var(--deep), var(--void));
+  }
+  .ocean-layer {
+    position: absolute; width: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+  }
+  .layer-label {
+    padding: 4px 12px;
+    border-left: 2px solid;
+    margin-left: 20px;
+  }
+  .layer-signal {
+    flex: 1; height: 1px;
+    position: relative; overflow: visible;
+  }
+  .layer-signal::after {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 1px;
+    background: linear-gradient(to right, transparent, currentColor, transparent);
+    animation: scanLine 3s ease-in-out infinite;
+  }
+
+  /* TECHNOLOGY */
+  #technology {
+    padding: 120px 10%;
+    background: linear-gradient(to bottom, transparent, var(--abyss) 20%, var(--abyss) 80%, transparent);
+  }
+  .tech-header { text-align: center; margin-bottom: 80px; }
+  .tech-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    margin-bottom: 80px;
+  }
+  .tech-card {
+    padding: 40px 32px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    position: relative; overflow: hidden;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    cursor: none;
+  }
+  .tech-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--cyan), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .tech-card:hover {
+    background: rgba(0,229,255,0.08);
+    border-color: rgba(0,229,255,0.35);
+    transform: translateY(-4px);
+  }
+  .tech-card:hover::before { opacity: 1; }
+  .tech-icon {
+    font-size: 2rem; margin-bottom: 20px;
+    display: block;
+  }
+  .tech-card-num {
+    position: absolute; top: 20px; right: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; color: rgba(0,229,255,0.06);
+    line-height: 1;
+  }
+  .tech-card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    margin-bottom: 12px; color: var(--white);
+  }
+  .tech-card-body {
+    font-size: 0.75rem; line-height: 1.8; color: var(--muted);
+  }
+  .tech-card-tag {
+    display: inline-block; margin-top: 16px;
+    padding: 4px 10px; font-size: 0.6rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    border: 1px solid var(--glass-border); color: var(--cyan);
+  }
+
+  /* COMPARISON */
+  #comparison {
+    padding: 80px 10%;
+  }
+  .compare-table {
+    width: 100%; border-collapse: collapse; margin-top: 48px;
+  }
+  .compare-table th, .compare-table td {
+    padding: 18px 24px; text-align: left;
+    font-size: 0.75rem; letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(0,229,255,0.08);
+  }
+  .compare-table th {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); padding-bottom: 24px;
+  }
+  .compare-table th.highlight { color: var(--cyan); }
+  .compare-table td.highlight {
+    color: var(--cyan); font-weight: 500;
+  }
+  .compare-table tr:hover td { background: rgba(0,229,255,0.03); }
+  .check { color: var(--cyan); }
+  .cross { color: rgba(122,168,188,0.3); }
+
+  /* MARKET */
+  #market {
+    padding: 120px 10%;
+    background: linear-gradient(to bottom, transparent, var(--abyss) 20%, var(--abyss) 80%, transparent);
+  }
+  .market-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+    margin-top: 64px;
+  }
+  .market-card {
+    padding: 40px; border: 1px solid var(--glass-border);
+    background: var(--glass); position: relative;
+  }
+  .market-card-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem; color: var(--cyan);
+    line-height: 1; margin-bottom: 8px;
+  }
+  .market-card-title {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1rem; margin-bottom: 12px;
+  }
+  .market-card-body {
+    font-size: 0.75rem; line-height: 1.8; color: var(--muted);
+  }
+
+  /* USE CASES */
+  #usecases {
+    padding: 120px 10%;
+  }
+  .usecase-list {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+    margin-top: 64px;
+  }
+  .usecase-item {
+    padding: 40px;
+    border: 1px solid var(--glass-border);
+    display: flex; gap: 24px;
+    transition: background 0.3s; cursor: none;
+  }
+  .usecase-item:hover { background: rgba(0,229,255,0.04); }
+  .usecase-icon {
+    font-size: 1.8rem; flex-shrink: 0;
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+  }
+  .usecase-content {}
+  .usecase-title {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 0.95rem; margin-bottom: 8px;
+  }
+  .usecase-body {
+    font-size: 0.73rem; line-height: 1.8; color: var(--muted);
+  }
+
+  /* TRACTION */
+  #traction {
+    padding: 80px 10%;
+    background: linear-gradient(135deg, rgba(0,229,255,0.04) 0%, transparent 60%);
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .traction-row {
+    display: flex; gap: 2px; margin-top: 48px; flex-wrap: wrap;
+  }
+  .traction-item {
+    flex: 1; min-width: 200px;
+    padding: 32px 28px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    position: relative;
+  }
+  .traction-item::after {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--cyan);
+  }
+  .traction-date {
+    font-size: 0.6rem; letter-spacing: 0.2em; color: var(--cyan);
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .traction-text {
+    font-family: 'Syne', sans-serif; font-weight: 600;
+    font-size: 0.9rem; line-height: 1.4;
+  }
+
+  /* TEAM */
+  #team {
+    padding: 120px 10%;
+  }
+  .team-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+    margin-top: 64px;
+  }
+  .team-card {
+    padding: 40px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass);
+    display: flex; gap: 28px; align-items: flex-start;
+    transition: border-color 0.3s; cursor: none;
+  }
+  .team-card:hover { border-color: rgba(0,229,255,0.3); }
+  .team-avatar {
+    width: 72px; height: 72px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--mid), var(--deep));
+    border: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--cyan);
+  }
+  .team-name {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1rem; margin-bottom: 4px;
+  }
+  .team-role {
+    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 12px;
+  }
+  .team-bio {
+    font-size: 0.72rem; line-height: 1.8; color: var(--muted);
+  }
+  .team-badge {
+    display: inline-block; margin-top: 12px;
+    padding: 3px 10px; font-size: 0.58rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid rgba(255,171,0,0.4); color: var(--amber);
+    background: rgba(255,171,0,0.06);
+  }
+
+  /* CTA */
+  #cta {
+    padding: 160px 10%;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  #cta::before {
+    content: '';
+    position: absolute; top: 50%; left: 50%;
+    width: 600px; height: 600px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-eyebrow {
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+  .cta-eyebrow::before, .cta-eyebrow::after {
+    content: ''; display: block; width: 40px; height: 1px; background: var(--cyan);
+  }
+  .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.95; margin-bottom: 32px;
+    letter-spacing: 0.02em;
+  }
+  .cta-title .accent { color: var(--cyan); }
+  .cta-sub {
+    font-size: 0.85rem; color: var(--muted);
+    max-width: 480px; margin: 0 auto 48px; line-height: 1.8;
+  }
+  .cta-contact {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; letter-spacing: 0.1em; color: var(--cyan);
+    text-decoration: none; border-bottom: 1px solid rgba(0,229,255,0.3);
+    padding-bottom: 4px; transition: border-color 0.2s;
+  }
+  .cta-contact:hover { border-color: var(--cyan); }
+
+  /* Footer */
+  footer {
+    padding: 32px 10%;
+    border-top: 1px solid var(--glass-border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted);
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem; color: var(--cyan); letter-spacing: 0.15em;
+  }
+
+  /* Animations */
+  @keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  @keyframes scanLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  @keyframes sonarPing {
+    0% { transform: scale(0); opacity: 0.8; }
+    100% { transform: scale(4); opacity: 0; }
+  }
+  @keyframes waveScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; } 50% { opacity: 0; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1; transform: translateY(0);
+  }
+
+  /* Depth bar */
+  .depth-bar {
+    position: fixed; left: 32px; top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    z-index: 50;
+  }
+  .depth-label {
+    writing-mode: vertical-rl; text-orientation: mixed;
+    font-size: 0.55rem; letter-spacing: 0.2em; color: var(--muted);
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .depth-line {
+    width: 1px; height: 120px;
+    background: linear-gradient(to bottom, var(--cyan), transparent);
+  }
+  .depth-dot {
+    width: 6px; height: 6px; background: var(--cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--cyan);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* Wave divider */
+  .wave-divider {
+    width: 100%; overflow: hidden;
+    height: 60px; position: relative;
+  }
+  .wave-divider svg { width: 200%; animation: waveScroll 8s linear infinite; }
+
+  /* Progress bar */
+  .reading-progress {
+    position: fixed; top: 0; left: 0;
+    height: 2px; background: var(--cyan);
+    z-index: 200; transition: width 0.1s;
+    box-shadow: 0 0 8px var(--cyan);
+  }
+
+  /* Ticker */
+  .ticker-wrap {
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 12px 0; overflow: hidden;
+    background: rgba(0,229,255,0.02);
+    position: relative; z-index: 1;
+  }
+  .ticker-inner {
+    display: flex; white-space: nowrap;
+    animation: waveScroll 20s linear infinite;
+    gap: 48px;
+  }
+  .ticker-item {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); flex-shrink: 0;
+  }
+  .ticker-item .dot { color: var(--cyan); margin: 0 8px; }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    #hero { padding: 120px 6% 80px; }
+    .hero-stats { display: none; }
+    #problem, .market-grid, .team-grid, .usecase-list { grid-template-columns: 1fr; }
+    .tech-grid { grid-template-columns: 1fr; }
+    .depth-bar { display: none; }
+    section { padding-left: 6% !important; padding-right: 6% !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Reading progress -->
+<div class="reading-progress" id="reading-progress"></div>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- Sonar canvas -->
+<canvas id="sonar-canvas"></canvas>
+
+<!-- Depth bar -->
+<div class="depth-bar">
+  <span class="depth-label">Depth</span>
+  <div class="depth-line"></div>
+  <div class="depth-dot"></div>
+</div>
+
+<!-- Nav -->
+<nav>
+  <a href="#hero" class="nav-logo">SEA-GAL<span>TECH</span></a>
+  <ul class="nav-links">
+    <li><a href="#technology">Technology</a></li>
+    <li><a href="#market">Market</a></li>
+    <li><a href="#usecases">Use Cases</a></li>
+    <li><a href="#traction">Traction</a></li>
+    <li><a href="#team">Team</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Request Deck</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-eyebrow">NSF SBIR-Funded · Ocean Tech · Series Seed</div>
+  <h1 class="hero-headline">
+    THE INTERNET<br>
+    <span class="accent">GOES</span><br>
+    UNDERWATER
+  </h1>
+  <p class="hero-sub">Sea-Gal Technologies has cracked high-speed wireless data transmission beneath the ocean surface — the last major connectivity frontier on Earth.</p>
+  <div class="hero-actions">
+    <a href="#technology" class="btn-primary">See the Technology</a>
+    <a href="#cta" class="btn-outline">Investor Contact</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-num">100×</div>
+      <div class="stat-label">Faster than legacy systems</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">$5B+</div>
+      <div class="stat-label">Addressable market by 2030</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">NSF</div>
+      <div class="stat-label">SBIR Award Recipient</div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- Ticker -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-item">MIMO Acoustic Communication <span class="dot">◆</span></span>
+    <span class="ticker-item">Underwater IoT <span class="dot">◆</span></span>
+    <span class="ticker-item">High Data-Rate Transmission <span class="dot">◆</span></span>
+    <span class="ticker-item">Ocean Enterprise Award 2025 <span class="dot">◆</span></span>
+    <span class="ticker-item">NSF SBIR Funded <span class="dot">◆</span></span>
+    <span class="ticker-item">IEEE Fellow Founded <span class="dot">◆</span></span>
+    <span class="ticker-item">Biofouling Detection <span class="dot">◆</span></span>
+    <span class="ticker-item">Acoustic Imaging <span class="dot">◆</span></span>
+    <span class="ticker-item">MIMO Acoustic Communication <span class="dot">◆</span></span>
+    <span class="ticker-item">Underwater IoT <span class="dot">◆</span></span>
+    <span class="ticker-item">High Data-Rate Transmission <span class="dot">◆</span></span>
+    <span class="ticker-item">Ocean Enterprise Award 2025 <span class="dot">◆</span></span>
+    <span class="ticker-item">NSF SBIR Funded <span class="dot">◆</span></span>
+    <span class="ticker-item">IEEE Fellow Founded <span class="dot">◆</span></span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="reveal">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-title">71% of Earth<br>is <span class="accent">Dark</span></h2>
+    <p class="section-body">Radio waves — the backbone of WiFi, 5G, and satellite — don't work underwater. They die within centimeters of the surface. The oceans, which cover 71% of the Earth, have no reliable, high-speed wireless communication layer.</p>
+    <p class="section-body">Today's underwater systems use cables (expensive, fragile) or low-rate acoustic links (think dial-up modem speeds). Meanwhile, the demand to monitor, operate, and connect underwater infrastructure is exploding.</p>
+    <p class="section-body" style="color: var(--white);">Sea-Gal Technologies solves this by using <strong>sound waves</strong> the way WiFi uses radio — but smarter, faster, and with breakthrough MIMO antenna technology adapted from 5G.</p>
+  </div>
+
+  <div class="ocean-viz reveal" id="ocean-viz">
+    <canvas id="depth-canvas" style="width:100%;height:100%;"></canvas>
+  </div>
+</section>
+
+<!-- TECHNOLOGY -->
+<section id="technology">
+  <div class="tech-header reveal">
+    <div class="section-label" style="justify-content:center;">Core Technology</div>
+    <h2 class="section-title" style="text-align:center;">How It Works,<br><span class="accent">Simply Put</span></h2>
+  </div>
+
+  <div class="tech-grid reveal">
+    <div class="tech-card">
+      <span class="tech-card-num">01</span>
+      <span class="tech-icon">🔊</span>
+      <div class="tech-card-title">Sound as Signal</div>
+      <div class="tech-card-body">Just like WiFi sends data on invisible radio waves, our system sends data on precisely engineered sound waves (acoustics). Sound travels well underwater — up to 1,500 m/s. We exploit this to transmit data.</div>
+      <span class="tech-card-tag">Acoustic Channel</span>
+    </div>
+    <div class="tech-card">
+      <span class="tech-card-num">02</span>
+      <span class="tech-icon">📡</span>
+      <div class="tech-card-title">MIMO: More Lanes, More Speed</div>
+      <div class="tech-card-body">Multiple-Input Multiple-Output (MIMO) is the same technology that powers your 5G phone. Multiple transmitters and receivers work in parallel, multiplying throughput. We're the first to commercialize MIMO for underwater acoustics at this data rate.</div>
+      <span class="tech-card-tag">MIMO Architecture</span>
+    </div>
+    <div class="tech-card">
+      <span class="tech-card-num">03</span>
+      <span class="tech-icon">🧠</span>
+      <div class="tech-card-title">AI-Enhanced Signal Processing</div>
+      <div class="tech-card-body">The ocean is noisy and unpredictable. Our software uses machine learning to filter noise, compensate for motion, and maintain stable links in real-world conditions — not just lab tanks.</div>
+      <span class="tech-card-tag">Adaptive ML</span>
+    </div>
+    <div class="tech-card">
+      <span class="tech-card-num">04</span>
+      <span class="tech-icon">🔌</span>
+      <div class="tech-card-title">Drop-In Hardware</div>
+      <div class="tech-card-body">Our modems and transducer components are designed to integrate with existing underwater platforms — ROVs, AUVs, sensors, buoys — without requiring custom redesigns.</div>
+      <span class="tech-card-tag">Modular Hardware</span>
+    </div>
+    <div class="tech-card">
+      <span class="tech-card-num">05</span>
+      <span class="tech-icon">📸</span>
+      <div class="tech-card-title">Acoustic Imaging</div>
+      <div class="tech-card-body">Our system doubles as an underwater imaging tool — capable of detecting biofouling on ship hulls, structural defects in pipelines, and marine life monitoring, all wirelessly and in real time.</div>
+      <span class="tech-card-tag">Dual-Use Sensing</span>
+    </div>
+    <div class="tech-card">
+      <span class="tech-card-num">06</span>
+      <span class="tech-icon">🌐</span>
+      <div class="tech-card-title">Surface Bridge</div>
+      <div class="tech-card-body">Data collected underwater is seamlessly relayed to surface gateways and pushed to the cloud or satellite internet — creating a full stack from ocean floor to operator dashboard.</div>
+      <span class="tech-card-tag">Cloud Integration</span>
+    </div>
+  </div>
+
+  <!-- Interactive depth demo -->
+  <div class="reveal" style="border: 1px solid var(--glass-border); padding: 48px; background: var(--glass); text-align: center;">
+    <div class="section-label" style="justify-content:center; margin-bottom: 12px;">Live Demo</div>
+    <h3 style="font-family:'Syne',sans-serif; font-size:1.2rem; margin-bottom: 8px;">Signal Depth Simulator</h3>
+    <p style="font-size:0.72rem; color:var(--muted); margin-bottom: 32px;">Drag the slider to see how our acoustic signal compares to radio at different depths.</p>
+    <div style="display:flex; align-items:center; gap: 16px; max-width: 600px; margin: 0 auto 24px;">
+      <span style="font-size:0.65rem; color:var(--muted); white-space:nowrap;">Surface</span>
+      <input type="range" id="depth-slider" min="0" max="1000" value="0"
+        style="flex:1; -webkit-appearance:none; height:2px; background: linear-gradient(to right, var(--cyan) 0%, var(--glass-border) 0%); outline:none; cursor:none;"
+      >
+      <span style="font-size:0.65rem; color:var(--muted); white-space:nowrap;">−1000m</span>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap: 16px; max-width:600px; margin: 0 auto;" id="signal-display">
+      <div style="padding:20px; border:1px solid rgba(255,100,100,0.2); background:rgba(255,100,100,0.04);">
+        <div style="font-size:0.6rem; letter-spacing:0.15em; color:#ff6464; margin-bottom:8px;">RADIO / WIFI / 5G</div>
+        <div id="radio-signal" style="font-family:'Bebas Neue',sans-serif; font-size:2rem; color:#ff6464;">100%</div>
+        <div style="font-size:0.65rem; color:var(--muted);">Signal strength</div>
+      </div>
+      <div style="padding:20px; border:1px solid var(--glass-border); background:var(--glass);">
+        <div style="font-size:0.6rem; letter-spacing:0.15em; color:var(--cyan); margin-bottom:8px;">SEA-GAL ACOUSTIC</div>
+        <div id="acoustic-signal" style="font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--cyan);">100%</div>
+        <div style="font-size:0.65rem; color:var(--muted);">Signal strength</div>
+      </div>
+    </div>
+    <p id="depth-message" style="margin-top:20px; font-size:0.72rem; color:var(--muted); height:20px;"></p>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="comparison" style="padding: 80px 10%;">
+  <div class="reveal">
+    <div class="section-label">Competitive Landscape</div>
+    <h2 class="section-title">Why We <span class="accent">Win</span></h2>
+  </div>
+  <div class="reveal" style="overflow-x:auto;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>Tethered Cables</th>
+          <th>Legacy Acoustic Modems</th>
+          <th class="highlight">Sea-Gal MIMO Acoustic</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Data Rate</td>
+          <td>High, but fixed</td>
+          <td>Very low (kbps)</td>
+          <td class="highlight">High (Mbps range) — 100×+ improvement</td>
+        </tr>
+        <tr>
+          <td>Wireless</td>
+          <td><span class="cross">✗ No</span></td>
+          <td><span class="check">✓ Yes</span></td>
+          <td class="highlight"><span class="check">✓ Yes</span></td>
+        </tr>
+        <tr>
+          <td>Mobile Platform Support</td>
+          <td><span class="cross">✗</span></td>
+          <td>Limited</td>
+          <td class="highlight"><span class="check">✓ Full ROV/AUV support</span></td>
+        </tr>
+        <tr>
+          <td>Acoustic Imaging</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td class="highlight"><span class="check">✓ Built-in</span></td>
+        </tr>
+        <tr>
+          <td>AI Signal Processing</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td class="highlight"><span class="check">✓ Adaptive ML</span></td>
+        </tr>
+        <tr>
+          <td>Installation cost</td>
+          <td>Very high</td>
+          <td>Medium</td>
+          <td class="highlight">Low — modular drop-in</td>
+        </tr>
+        <tr>
+          <td>IP / Research Pedigree</td>
+          <td>N/A</td>
+          <td>Minimal</td>
+          <td class="highlight">NSF SBIR + Lehigh University + 20yr research</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market">
+  <div class="reveal">
+    <div class="section-label">Market Opportunity</div>
+    <h2 class="section-title">A <span class="accent">$5B+</span> Ocean<br>Connectivity Race</h2>
+    <p class="section-body" style="max-width:600px;">The global underwater acoustic communication market is growing rapidly, driven by offshore energy, defense, climate science, and aquaculture. We're positioned at the intersection of all of them.</p>
+  </div>
+  <div class="market-grid reveal">
+    <div class="market-card">
+      <div class="market-card-num">$5.2B</div>
+      <div class="market-card-title">Underwater Acoustic Modem Market by 2030</div>
+      <div class="market-card-body">Global demand for underwater wireless links is accelerating, driven by offshore wind, autonomous ocean vehicles, and subsea infrastructure monitoring.</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-num">$22B</div>
+      <div class="market-card-title">Marine IoT Market Projection (2032)</div>
+      <div class="market-card-body">Every ship, buoy, pipeline, and AUV becomes a data node. The ocean is the largest untapped IoT frontier, and connectivity is the missing layer.</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-num">40%</div>
+      <div class="market-card-title">CAGR in Offshore Wind — the Fastest Customer Segment</div>
+      <div class="market-card-body">Wind farms are moving farther offshore. Maintaining them means deploying ROVs and sensors that need reliable, high-bandwidth links — exactly what we provide.</div>
+    </div>
+    <div class="market-card">
+      <div class="market-card-num">100%</div>
+      <div class="market-card-title">Ocean Coverage — Zero Competitors with Our Approach</div>
+      <div class="market-card-body">No commercial MIMO underwater acoustic modem exists at our performance level. We are building the category.</div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section id="usecases">
+  <div class="reveal">
+    <div class="section-label">Who Buys This</div>
+    <h2 class="section-title">Six Industries.<br><span class="accent">One Platform.</span></h2>
+  </div>
+  <div class="usecase-list reveal">
+    <div class="usecase-item">
+      <div class="usecase-icon">⚡</div>
+      <div class="usecase-content">
+        <div class="usecase-title">Offshore Energy</div>
+        <div class="usecase-body">Oil & gas and wind operators need real-time monitoring of subsea pipelines, rigs, and turbine foundations. Our system enables continuous HD data streams from the seabed to ops centers — without cables.</div>
+      </div>
+    </div>
+    <div class="usecase-item">
+      <div class="usecase-icon">🛡️</div>
+      <div class="usecase-content">
+        <div class="usecase-title">Defense & Maritime Security</div>
+        <div class="usecase-body">Naval forces and coast guards operate AUVs for surveillance, mine detection, and anti-submarine warfare. High-bandwidth acoustic links dramatically increase mission capability.</div>
+      </div>
+    </div>
+    <div class="usecase-item">
+      <div class="usecase-icon">🌊</div>
+      <div class="usecase-content">
+        <div class="usecase-title">Climate & Ocean Science</div>
+        <div class="usecase-body">Oceanographers deploy sensor arrays to track temperature, acidity, currents, and marine life. Our platform transforms isolated sensors into a connected, real-time data network.</div>
+      </div>
+    </div>
+    <div class="usecase-item">
+      <div class="usecase-icon">🐟</div>
+      <div class="usecase-content">
+        <div class="usecase-title">Aquaculture</div>
+        <div class="usecase-body">Fish farms need oxygen, temperature, and feeding monitoring at depth. Reliable wireless comms cut operating costs and increase yield through precision management.</div>
+      </div>
+    </div>
+    <div class="usecase-item">
+      <div class="usecase-icon">🚢</div>
+      <div class="usecase-content">
+        <div class="usecase-title">Port & Hull Inspection</div>
+        <div class="usecase-body">Our acoustic imaging detects biofouling — algae and barnacle buildup that costs the shipping industry $150B/year in fuel waste. Automated scanning replaces costly diver inspections.</div>
+      </div>
+    </div>
+    <div class="usecase-item">
+      <div class="usecase-icon">🔬</div>
+      <div class="usecase-content">
+        <div class="usecase-title">Subsea Infrastructure</div>
+        <div class="usecase-body">Internet cables, water intake structures, and nuclear facility outflows all have underwater components that require periodic inspection. Our system enables autonomous, continuous monitoring.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRACTION -->
+<section id="traction">
+  <div class="reveal">
+    <div class="section-label">Traction</div>
+    <h2 class="section-title">Validated by<br><span class="accent">the Best</span></h2>
+  </div>
+  <div class="traction-row reveal">
+    <div class="traction-item">
+      <div class="traction-date">April 2025</div>
+      <div class="traction-text">NSF SBIR Award — Federal validation of our core MIMO acoustic comms research</div>
+    </div>
+    <div class="traction-item">
+      <div class="traction-date">April 2025</div>
+      <div class="traction-text">Ocean Enterprise Accelerator Award — Recognized in Acoustic Imaging sector</div>
+    </div>
+    <div class="traction-item">
+      <div class="traction-date">Ongoing</div>
+      <div class="traction-text">20+ years of foundational research being commercialized from Lehigh University lab to field products</div>
+    </div>
+    <div class="traction-item">
+      <div class="traction-date">Active</div>
+      <div class="traction-text">Products in development: Acoustic modems, transducer components, software stack, engineering services</div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="reveal">
+    <div class="section-label">Founding Team</div>
+    <h2 class="section-title">Built by the<br><span class="accent">World Expert</span></h2>
+  </div>
+  <div class="team-grid reveal">
+    <div class="team-card">
+      <div class="team-avatar">YZ</div>
+      <div>
+        <div class="team-name">Dr. Yahong Rosa Zheng</div>
+        <div class="team-role">Principal Founder & CEO</div>
+        <div class="team-bio">PhD from Carleton University. Professor at Lehigh University. 20+ years of underwater acoustic communications research. Former Mizzou ECE faculty for 13 years. NSF CAREER Award recipient (2009). IEEE Fellow since 2015. Associate Editor for 3 IEEE journals including IEEE Journal of Oceanic Engineering.</div>
+        <span class="team-badge">IEEE Fellow · NSF CAREER Award</span>
+      </div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar">RH</div>
+      <div>
+        <div class="team-name">Rong "Reacky" Huang</div>
+        <div class="team-role">Co-Founder & CFO</div>
+        <div class="team-bio">19 years in accounting, banking, and supply chain. 12 years at Nestlé USA, 5 years at Thermo Fisher Scientific, 2 years at First Commonwealth FCU. MBA in Finance from DeSales University. Led multiple enterprise-scale cost reduction and process improvement projects.</div>
+        <span class="team-badge">MBA Finance · Nestlé · Thermo Fisher</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-eyebrow">Ready to Dive In</div>
+  <h2 class="cta-title">JOIN THE<br><span class="accent">DEEP END</span></h2>
+  <p class="cta-sub">We're raising a seed round to accelerate product development and field deployments. If you're investing in ocean tech, defense, IoT, or deep tech — let's talk.</p>
+  <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+    <a href="mailto:contact@sea-gal-tech.com" class="btn-primary">Request Pitch Deck</a>
+    <a href="https://sea-gal-tech.com" target="_blank" class="btn-outline">Visit Full Site</a>
+  </div>
+  <p style="margin-top:40px; font-size:0.65rem; color:var(--muted);">
+    Sea-Gal Technologies Inc. · Bethlehem, PA · <a href="mailto:contact@sea-gal-tech.com" class="cta-contact">contact@sea-gal-tech.com</a>
+  </p>
+</section>
+
+<footer>
+  <span class="footer-logo">SGT</span>
+  <span>© 2025 Sea-Gal Technologies Inc. All rights reserved.</span>
+  <span style="color:var(--cyan);">Investor Overview v1.0</span>
+</footer>
+
+<script>
+// ─── Cursor ───
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+document.querySelectorAll('a, button, input[type=range], .tech-card, .usecase-item, .team-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+    cursor.style.background = 'var(--glow)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    cursor.style.background = 'var(--cyan)';
+  });
+});
+
+// ─── Reading Progress ───
+const rp = document.getElementById('reading-progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  rp.style.width = (window.scrollY / h * 100) + '%';
+});
+
+// ─── Sonar Canvas ───
+const sc = document.getElementById('sonar-canvas');
+const sctx = sc.getContext('2d');
+let rings = [];
+function resizeSonar() { sc.width = window.innerWidth; sc.height = window.innerHeight; }
+resizeSonar();
+window.addEventListener('resize', resizeSonar);
+
+function addRing() {
+  rings.push({ x: Math.random() * sc.width, y: Math.random() * sc.height, r: 0, maxR: 200 + Math.random() * 300, speed: 0.4 + Math.random() * 0.6 });
+}
+for (let i = 0; i < 5; i++) addRing();
+
+function drawSonar() {
+  sctx.clearRect(0, 0, sc.width, sc.height);
+  rings.forEach((ring, i) => {
+    ring.r += ring.speed;
+    const alpha = 1 - ring.r / ring.maxR;
+    sctx.beginPath();
+    sctx.arc(ring.x, ring.y, ring.r, 0, Math.PI * 2);
+    sctx.strokeStyle = `rgba(0,229,255,${alpha * 0.3})`;
+    sctx.lineWidth = 1;
+    sctx.stroke();
+    if (ring.r >= ring.maxR) {
+      rings[i] = { x: Math.random() * sc.width, y: Math.random() * sc.height, r: 0, maxR: 200 + Math.random() * 300, speed: 0.4 + Math.random() * 0.6 };
+    }
+  });
+  requestAnimationFrame(drawSonar);
+}
+drawSonar();
+
+// ─── Click sonar burst ───
+document.addEventListener('click', e => {
+  for (let i = 0; i < 3; i++) {
+    rings.push({ x: e.clientX, y: e.clientY, r: 0, maxR: 100 + i * 60, speed: 1.5 - i * 0.2 });
+  }
+});
+
+// ─── Depth Viz Canvas ───
+const dc = document.getElementById('depth-canvas');
+if (dc) {
+  const dctx = dc.getContext('2d');
+  const parent = dc.parentElement;
+  function resizeDepth() { dc.width = parent.offsetWidth; dc.height = parent.offsetHeight; }
+  resizeDepth();
+  window.addEventListener('resize', resizeDepth);
+
+  const layers = [
+    { depth: 0.08, label: 'Surface', color: '#00e5ff', signal: 100 },
+    { depth: 0.22, label: '−50m: Sunlight Zone', color: '#00bcd4', signal: 95 },
+    { depth: 0.38, label: '−200m: Twilight Zone', color: '#006080', signal: 80 },
+    { depth: 0.56, label: '−1000m: Midnight Zone', color: '#003348', signal: 60 },
+    { depth: 0.74, label: '−4000m: Abyssal Zone', color: '#001a26', signal: 40 },
+    { depth: 0.90, label: '−6000m+ Hadal Zone', color: '#000d14', signal: 20 },
+  ];
+
+  let particles = Array.from({length: 60}, () => ({
+    x: Math.random() * 400,
+    y: Math.random() * 500,
+    r: Math.random() * 2 + 0.5,
+    vy: -0.2 - Math.random() * 0.3,
+    alpha: Math.random()
+  }));
+
+  let waveOffset = 0;
+  function drawDepth() {
+    if (!dc.width) return;
+    dctx.clearRect(0, 0, dc.width, dc.height);
+
+    // BG gradient
+    const bg = dctx.createLinearGradient(0,0,0,dc.height);
+    bg.addColorStop(0, '#0a2540');
+    bg.addColorStop(1, '#020810');
+    dctx.fillStyle = bg;
+    dctx.fillRect(0,0,dc.width,dc.height);
+
+    // Layer bands
+    layers.forEach((l, idx) => {
+      const y = l.depth * dc.height;
+      dctx.beginPath();
+      dctx.moveTo(0, y);
+      dctx.lineTo(dc.width, y);
+      dctx.strokeStyle = `rgba(${hexToRgb(l.color)},0.4)`;
+      dctx.lineWidth = 0.5;
+      dctx.setLineDash([4,8]);
+      dctx.stroke();
+      dctx.setLineDash([]);
+
+      dctx.fillStyle = `rgba(0,229,255,0.6)`;
+      dctx.font = '9px DM Mono, monospace';
+      dctx.fillText(l.label, 10, y - 4);
+
+      // Signal strength bar
+      const bw = (l.signal / 100) * 60;
+      dctx.fillStyle = `rgba(0,229,255,${0.1 + l.signal/200})`;
+      dctx.fillRect(dc.width - 80, y + 4, bw, 4);
+    });
+
+    // Acoustic wave animation
+    waveOffset += 0.04;
+    for (let row = 0; row < 8; row++) {
+      const yBase = (row / 8) * dc.height;
+      const alpha = 0.15 - row * 0.015;
+      dctx.beginPath();
+      for (let x = 0; x < dc.width; x += 2) {
+        const wave = Math.sin(x * 0.03 + waveOffset + row * 0.8) * (8 - row);
+        const y = yBase + wave;
+        if (x === 0) dctx.moveTo(x, y); else dctx.lineTo(x, y);
+      }
+      dctx.strokeStyle = `rgba(0,229,255,${alpha})`;
+      dctx.lineWidth = 1;
+      dctx.stroke();
+    }
+
+    // Particles (bubbles)
+    particles.forEach(p => {
+      p.y += p.vy;
+      if (p.y < 0) { p.y = dc.height; p.x = Math.random() * dc.width; }
+      dctx.beginPath();
+      dctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      dctx.fillStyle = `rgba(0,229,255,${p.alpha * 0.3})`;
+      dctx.fill();
+    });
+
+    // Signal source beacon
+    const bx = dc.width / 2, by = dc.height * 0.85;
+    dctx.beginPath();
+    dctx.arc(bx, by, 6, 0, Math.PI*2);
+    dctx.fillStyle = '#00e5ff';
+    dctx.shadowBlur = 12; dctx.shadowColor = '#00e5ff';
+    dctx.fill();
+    dctx.shadowBlur = 0;
+
+    const pingR = ((Date.now() % 2000) / 2000) * 80;
+    dctx.beginPath();
+    dctx.arc(bx, by, pingR, 0, Math.PI*2);
+    dctx.strokeStyle = `rgba(0,229,255,${1 - pingR/80})`;
+    dctx.lineWidth = 1;
+    dctx.stroke();
+
+    dctx.fillStyle = 'rgba(0,229,255,0.8)';
+    dctx.font = '9px DM Mono';
+    dctx.textAlign = 'center';
+    dctx.fillText('SEA-GAL TRANSMITTER', bx, by + 20);
+    dctx.textAlign = 'left';
+
+    requestAnimationFrame(drawDepth);
+  }
+  drawDepth();
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return `${r},${g},${b}`;
+}
+
+// ─── Depth Slider ───
+const slider = document.getElementById('depth-slider');
+if (slider) {
+  slider.addEventListener('input', () => {
+    const d = parseInt(slider.value);
+    const pct = (d / 1000 * 100).toFixed(0);
+    slider.style.background = `linear-gradient(to right, var(--cyan) ${pct}%, rgba(0,229,255,0.15) ${pct}%)`;
+    const radioStrength = d < 1 ? 100 : Math.max(0, Math.round(100 * Math.exp(-d * 0.08)));
+    const acousticStrength = Math.max(15, Math.round(100 - d * 0.085));
+    document.getElementById('radio-signal').textContent = radioStrength + '%';
+    document.getElementById('acoustic-signal').textContent = acousticStrength + '%';
+    const msg = document.getElementById('depth-message');
+    if (d < 5) msg.textContent = 'At the surface, all technologies work.';
+    else if (d < 20) msg.textContent = `At −${d}m: Radio is already failing. Sea-Gal maintains strong signal.`;
+    else if (d < 100) msg.textContent = `At −${d}m: Radio is dead. Sea-Gal is fully operational.`;
+    else if (d < 500) msg.textContent = `At −${d}m: Only acoustics work. Sea-Gal delivers high-rate data.`;
+    else msg.textContent = `At −${d}m deep ocean: Sea-Gal is the only viable wireless solution.`;
+  });
+}
+
+// ─── Scroll Reveal ───
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => io.observe(el));
+
+// ─── Nav active section ───
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  links.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? 'var(--cyan)' : '';
+  });
+});
+</script>
+</body>
+</html>
